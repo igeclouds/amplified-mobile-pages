@@ -2,6 +2,7 @@
 name: 'Lint: JavaScript'
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '**/*.js'
@@ -10,21 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cloning repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setting up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 14
-
-      - uses: actions/cache@v3
-        if: ${{ !env.ACT }}
-        with:
-          path: '**/node_modules'
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+          cache: npm
 
       - name: Installing Node.js packages
-        run: npm install
+        run: npm ci
 
       - name: Linting JavaScript files
         run: |
